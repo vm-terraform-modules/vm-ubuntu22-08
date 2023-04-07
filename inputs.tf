@@ -25,3 +25,7 @@ variable "instance_where_to_run" {
   type = string
   default = "red"
 }
+variable "instance_names" {
+  type = list(string)
+ default = [ "red" ]
+}

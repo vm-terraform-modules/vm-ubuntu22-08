@@ -34,7 +34,8 @@ resource "aws_key_pair" "mykeypair" {
   public_key = file("./id_rsa.pub")
 }
 
-resource "aws_instance" "red" {
+resource "aws_instance" "web_instance" {
+  count=length(var.instance_names)
   ami           = var.ami_id
   instance_type = "t2.micro"
 vpc_security_group_ids = [aws_security_group.ntier_sg.id ]
@@ -43,7 +44,7 @@ subnet_id = data.aws_subnets.public_subnets.ids[0]
 key_name = aws_key_pair.mykeypair.key_name 
 
   tags = {
-    Name = "red"
+    Name = var.instance_name[count.index]
   }
     depends_on = [
     data.aws_subnets.public_subnets,
@@ -51,23 +52,23 @@ key_name = aws_key_pair.mykeypair.key_name
     aws_security_group.ntier_sg
   ]
 }
-resource "aws_instance" "blue" {
-  ami           = var.ami_id
-  instance_type = "t2.micro"
-vpc_security_group_ids = [aws_security_group.ntier_sg.id ]
-associate_public_ip_address = true
-subnet_id = data.aws_subnets.public_subnets.ids[0]
-key_name = aws_key_pair.mykeypair.key_name 
+# resource "aws_instance" "blue" {
+#   ami           = var.ami_id
+#   instance_type = "t2.micro"
+# vpc_security_group_ids = [aws_security_group.ntier_sg.id ]
+# associate_public_ip_address = true
+# subnet_id = data.aws_subnets.public_subnets.ids[0]
+# key_name = aws_key_pair.mykeypair.key_name 
 
-  tags = {
-    Name = "blue"
-  }
-    depends_on = [
-    data.aws_subnets.public_subnets,
-    aws_subnet.subnets,
-    aws_security_group.ntier_sg
-  ]
-}
+#   tags = {
+#     Name = "blue"
+#   }
+#     depends_on = [
+#     data.aws_subnets.public_subnets,
+#     aws_subnet.subnets,
+#     aws_security_group.ntier_sg
+#   ]
+# }
 
 # resource "null_resource" "pet_clinic_install" {
 #   triggers = {
