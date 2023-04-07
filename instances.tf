@@ -44,7 +44,7 @@ subnet_id = data.aws_subnets.public_subnets.ids[0]
 key_name = aws_key_pair.mykeypair.key_name 
 
   tags = {
-    Name = var.instance_name[count.index]
+    Name = var.instance_names[count.index]
   }
     depends_on = [
     data.aws_subnets.public_subnets,
