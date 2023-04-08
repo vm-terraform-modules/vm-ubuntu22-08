@@ -31,3 +31,7 @@ variable "instance_names" {
   type    = list(string)
   default = ["red", "yellow"]
 }
+variable "deploy_inst_name" {
+  type = string
+  default = "red"
+}

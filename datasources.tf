@@ -23,3 +23,13 @@ data "aws_subnets" "private_subnets" {
     aws_subnet.subnets
   ]
 }
+data "aws_instance" "deploy_inst" {
+   filter {
+    name   = "vpc-id"
+    values = [aws_vpc.ntier.id]
+  }
+   filter {
+    name   = "tag:Name"
+    values = var.deploy_inst_name
+  }
+}
