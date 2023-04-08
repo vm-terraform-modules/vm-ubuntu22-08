@@ -30,6 +30,6 @@ data "aws_instance" "deploy_inst" {
   }
    filter {
     name   = "tag:Name"
-    values = var.deploy_inst_name
+    values = [var.deploy_inst_name]
   }
 }
