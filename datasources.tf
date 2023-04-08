@@ -17,9 +17,9 @@ data "aws_subnets" "private_subnets" {
     values = [aws_vpc.ntier.id]
   }
   tags = {
- "Type" = "private"
+    "Type" = "private"
   }
-    depends_on = [
+  depends_on = [
     aws_subnet.subnets
   ]
 }

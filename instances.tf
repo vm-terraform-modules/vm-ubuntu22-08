@@ -4,25 +4,25 @@ resource "aws_security_group" "ntier_sg" {
   vpc_id      = aws_vpc.ntier.id
 
   ingress {
-    description      = "allows 80 port"
-    from_port        = 80
-    to_port          = 80
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
+    description = "allows 80 port"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
-    description      = "allows 22 port"
-    from_port        = 22
-    to_port          = 22
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
+    description = "allows 22 port"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
@@ -30,23 +30,23 @@ resource "aws_security_group" "ntier_sg" {
   }
 }
 resource "aws_key_pair" "mykeypair" {
-  key_name = "mykeypair"
+  key_name   = "mykeypair"
   public_key = file("./id_rsa.pub")
 }
 
 resource "aws_instance" "web_instance" {
-  count=length(var.instance_names)
-  ami           = var.ami_id
-  instance_type = "t2.micro"
-vpc_security_group_ids = [aws_security_group.ntier_sg.id ]
-associate_public_ip_address = true
-subnet_id = data.aws_subnets.public_subnets.ids[0]
-key_name = aws_key_pair.mykeypair.key_name 
+  count                       = length(var.instance_names)
+  ami                         = var.ami_id
+  instance_type               = "t2.micro"
+  vpc_security_group_ids      = [aws_security_group.ntier_sg.id]
+  associate_public_ip_address = true
+  subnet_id                   = data.aws_subnets.public_subnets.ids[0]
+  key_name                    = aws_key_pair.mykeypair.key_name
 
   tags = {
     Name = var.instance_names[count.index]
   }
-    depends_on = [
+  depends_on = [
     data.aws_subnets.public_subnets,
     aws_subnet.subnets,
     aws_security_group.ntier_sg

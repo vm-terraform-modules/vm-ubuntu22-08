@@ -15,12 +15,12 @@ resource "aws_vpc" "ntier" {
 }
 
 resource "aws_subnet" "subnets" {
-  vpc_id     = aws_vpc.ntier.id
-  count=length(var.vpc_info.subnet_names)
-  cidr_block = cidrsubnet(var.vpc_cidr,8,count.index)
-
+  vpc_id            = aws_vpc.ntier.id
+  count             = length(var.vpc_info.subnet_names)
+  cidr_block        = cidrsubnet(var.vpc_cidr, 8, count.index)
+  availability_zone = "${var.region}${var.vpc_info.zones[count.index % 2]}"
   tags = {
-    Type=contains(var.vpc_info.public_subnets,var.vpc_info.subnet_names[count.index])?"public":"private"
+    Type = contains(var.vpc_info.public_subnets, var.vpc_info.subnet_names[count.index]) ? "public" : "private"
     Name = var.vpc_info.subnet_names[count.index]
   }
   depends_on = [
@@ -52,8 +52,8 @@ resource "aws_route_table" "publicRT" {
 }
 resource "aws_route_table_association" "publicRTAsociations" {
   route_table_id = aws_route_table.publicRT.id
-count=length(var.vpc_info.public_subnets)
-  subnet_id      = data.aws_subnets.public_subnets.ids[count.index] 
+  count          = length(var.vpc_info.public_subnets)
+  subnet_id      = data.aws_subnets.public_subnets.ids[count.index]
 }
 
 resource "aws_route_table" "privateRT" {
