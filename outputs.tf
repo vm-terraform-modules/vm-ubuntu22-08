@@ -3,5 +3,5 @@ output "pub_sub" {
 }
 
 output "deploy_inst_ip" {
-  value=data.aws_instance.deploy_inst
+  value=data.aws_instance.deploy_inst.public_ip
 }
