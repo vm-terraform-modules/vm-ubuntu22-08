@@ -32,4 +32,7 @@ data "aws_instance" "deploy_inst" {
     name   = "tag:Name"
     values = [var.deploy_inst_name]
   }
+  depends_on = [
+    aws_instance.web_instance
+  ]
 }
